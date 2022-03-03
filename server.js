@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.static('dist'));
 
-app.get('/proxy', (req, res) => {
+app.get('/proxy/media', (req, res) => {
     const mediaURL = req.query.url
 
     let parts = url.parse(mediaURL);
