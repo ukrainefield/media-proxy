@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.static('dist'));
 
-app.get('/proxy/media', (req, res) => {
-    const mediaURL = req.query.url
+app.get('/proxy/media/*', (req, res) => {
+    const mediaURL = req.params[0]
     console.log('Proxying media: ', mediaURL);
 
     let parts = url.parse(mediaURL);
