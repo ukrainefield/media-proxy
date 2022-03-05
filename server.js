@@ -2,32 +2,15 @@ const express = require('express');
 const app = express();
 const axios = require('axios').default;
 const PORT = process.env.PORT || 4000;
+const path = require('path');
+const mediaProxyRouter = require('./routes/mediaProxy');
 
 app.use(express.static('dist'));
 
-app.get('/proxy/media/*', async (req, res) => {
-  try {
-    const mediaURL = req.params[0];
-    console.log('Proxying media: ', mediaURL);
+app.use('/proxy/media', mediaProxyRouter);
 
-    axios
-      .get(mediaURL, {
-        responseType: 'arraybuffer',
-      })
-      .then(response => {
-        const buffer = Buffer.from(response.data, 'base64');
-        res.send(buffer);
-      })
-      .catch(ex => {
-        res.status(500).json({
-          error: ex.message,
-        });
-      });
-  } catch (e) {
-    res.status(500).json({
-      error: e.message,
-    });
-  }
+app.get('*', function (req, res) {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
 app.listen(PORT);
